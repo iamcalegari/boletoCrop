@@ -6,10 +6,13 @@ const base64Data = readFileSync(path.join(__dirname, "public/docs/bmg.txt"), {
 });
 
 const getBoletoImage = async (boletoData) => {
+  console.log("🚀 Iniciando a conversão...");
+  
   const { exec } = require("child_process");
   const sharp = require("sharp");
 
   exec(`mkdir ${__dirname}/public/pdfs ${__dirname}/public/images`);
+  
   await sleep(100);
 
   const pdfFilePath = path.join(__dirname, "public/pdfs/boletoBMG.pdf");
@@ -20,6 +23,8 @@ const getBoletoImage = async (boletoData) => {
   writeFileSync(pdfFilePath, base64Buffer);
 
   exec(`pdftoppm ${pdfFilePath} ${pngFilePath} -png`);
+  
+  console.log("🚀 Convertendo PDF -> PNG...");
   await sleep(300);
 
   const imageBuffer = readFileSync(
@@ -29,6 +34,9 @@ const getBoletoImage = async (boletoData) => {
   sharp(imageBuffer)
     .extract({ left: 36, top: 1101, width: 1086, height: 580 })
     .toFile(path.join(__dirname, "public/images/boletoBMG.png"));
+  
+  console.log("✨ Pronto, PDF convertido");
+  console.log("👀 PNG salvo em: ./public/images/boletoBMG.png");
 };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
