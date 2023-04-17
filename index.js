@@ -20,11 +20,10 @@ const getBoletoImage = async (boletoData) => {
 
   const base64Buffer = Buffer.from(boletoData, "base64");
 
-  writeFileSync(pdfFilePath, base64Buffer);
-
-  exec(`pdftoppm ${pdfFilePath} ${pngFilePath} -png`);
-
   console.log("🚀 Convertendo PDF -> PNG...");
+  
+  writeFileSync(pdfFilePath, base64Buffer);
+  exec(`pdftoppm ${pdfFilePath} ${pngFilePath} -png`);
   await sleep(300);
 
   const imageBuffer = readFileSync(
